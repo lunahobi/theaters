@@ -1,0 +1,32 @@
+/* Show it is fixed to the top */
+body {
+    padding-top: 4.5rem;
+}
+
+footer {
+    background: #f5f1e7;
+}
+
+.navbar-dark {
+    background: #0a467e;
+}
+
+#contacts {
+    background: #0a467e;
+    color: white;
+}
+
+#btn-contacts {
+    background-color: #e37914;
+    color: white;
+}
+
+#btn-contacts:hover{
+    background-color: #b35f10;
+    transition: background-color 0.3s;
+}
+
+footer a{
+    color:#0a467e;
+    text-decoration-color: #0a467e;
+}
