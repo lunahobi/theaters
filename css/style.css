@@ -1,6 +1,24 @@
 /* Show it is fixed to the top */
 body {
-    padding-top: 4.5rem;
+    /*padding-top: 4.5rem;*/
+    padding-top: 3rem;
+    color: rgb(var(--bs-tertiary-color-rgb));
+}
+
+/* Carousel base class */
+.carousel {
+    margin-bottom: 4rem;
+}
+
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+    bottom: 3rem;
+    z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel-item {
+    height: 32rem;
 }
 
 footer {
@@ -8,11 +26,11 @@ footer {
 }
 
 .navbar-dark {
-    background: #0a467e;
+    background: #14768b;
 }
 
 #contacts {
-    background: #0a467e;
+    background: #14768b;
     color: white;
 }
 
@@ -21,12 +39,55 @@ footer {
     color: white;
 }
 
-#btn-contacts:hover{
+.btn-carousel {
+    background-color: #14768b;
+    color: white;
+}
+
+.btn-carousel:hover {
+    background-color: #0a467e;
+    transition: background-color 0.3s;
+}
+
+
+/* .carousel-inner img {
+    filter: brightness(40%);
+} */
+
+#carousel-1 {
+    background-image: url("../img/carousel1.jpg");
+    background-size: cover;
+}
+
+#carousel-2 {
+    background-image: url("../img/carousel2.jpg");
+    background-size: cover;
+}
+
+#carousel-3 {
+    background-image: url("../img/carousel3.jpg");
+    background-size: cover;
+    background-blend-mode: hard-light;
+}
+
+.text-carousel-h1 {
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+    color: #f5f1e7
+}
+
+.text-carousel-p {
+    color: #f5f1e7;
+    font-size: large;
+    text-shadow: 1px 1px 2px black
+}
+
+#btn-contacts:hover {
     background-color: #b35f10;
     transition: background-color 0.3s;
 }
 
-footer a{
-    color:#0a467e;
-    text-decoration-color: #0a467e;
+footer a {
+    color: #14768b;
+    text-decoration-color: #14768b;
 }

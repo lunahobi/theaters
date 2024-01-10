@@ -47,11 +47,56 @@
         </div>
     </nav>
 
-    <main class="container">
-        <div class="bg-body-tertiary p-5 rounded">
-            <h1>Navbar example</h1>
-            <p class="lead">This example is a quick exercise to illustrate how fixed to top navbar works. As you scroll, it will remain fixed to the top of your browser’s viewport.</p>
-            <a class="btn btn-lg btn-primary" href="../components/navbar/" role="button">View navbar docs &raquo;</a>
+    <main>
+        <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div id="carousel-1" class="carousel-item active">
+                    <div clsass="container">
+                        <div class="carousel-caption text-start">
+                            <h1 class='text-carousel-h1 d-none d-md-block'>Добро пожаловать на сайт с театральными плошадками и коллективами РФ!</h1>
+                            <h1 class='text-carousel-h1 d-block d-md-none'>Добро пожаловать!</h1>
+                            <p class='text-carousel-p d-none d-md-block'>Здесь вы сможете выбрать театр поблизости либо по различным критериям, также у вас есть возможность просматировать их на карте, а еще прокладывать к ним путь</p>
+                            <p class='text-carousel-p d-block d-md-none'>Здесь вы сможете выбрать театр, также у вас есть возможность просматировать их на карте, а еще прокладывать к ним путь</p>
+                            <p><a class="btn btn-lg btn-carousel" href="#">Подробнее</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div id="carousel-2" class="carousel-item">
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1 class="text-carousel-h1">Большой театр</h1>
+                            <p class="text-carousel-p d-none d-md-block">Большой театр России всегда был и остается одним из основных символов нашего государства
+                                и его культуры. Это главный национальный театр России, носитель традиций российской
+                                и центр мировой музыкальной культуры, способствующий развитию театрального искусства страны</p>
+                            <p class="text-carousel-p d-block d-md-none">Большой театр России всегда был и остается одним из основных символов нашего государства
+                                и его культуры</p>
+                            <p><a class="btn btn-lg btn-carousel" href="#">Подробнее</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div id="carousel-3" class="carousel-item">
+                    <div class="container">
+                        <div class="carousel-caption text-end">
+                            <h1 class="text-carousel-h1">Мариинский театр</h1>
+                            <p class="text-carousel-p" >Театр оперы и балета в Санкт-Петербурге, один из ведущих музыкальных театров России и мира</p>
+                            <p><a class="btn btn-lg btn-carousel" href="#">Подробнее</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     </main>
 
@@ -60,7 +105,7 @@
         <div class="container mw-80">
             <div class="row">
                 <h2 class="text-center">Контакты</h2>
-                <div class="col-1"></div>
+                <!-- <div class="col-1"></div> -->
                 <div class="col">
                     <form>
                         <div class="mb-3">
@@ -76,7 +121,7 @@
                             <textarea class="form-control" id="message" rows="4" required></textarea>
                         </div>
                         <div class="text-center">
-                            <button id='btn-contacts'type="submit" class="btn">Отправить</button>
+                            <button id='btn-contacts' type="submit" class="btn">Отправить</button>
                         </div>
 
                     </form>
@@ -93,10 +138,8 @@
                     </div>
 
                     <div class="hstack gap-2 ">
-                        <img src="img/telegram.svg" alt="telegram">
-                        <img src="img/instagram.svg" alt="instagram">
-                        <img src="img/facebook.svg" alt="facebook">
-                        <img src="img/whatsapp.svg" alt="whatsapp">
+                        <a href="https://telegram.org/"><img src="img/telegram.svg" alt="telegram"></a>
+                        <a href="https://whatsapp.com/"><img src="img/whatsapp.svg" alt="whatsapp"></a>
                     </div>
                 </div>
             </div>
@@ -104,7 +147,9 @@
     </section>
 
     <footer class="text-center py-1">
-        Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved.<br>
+        Copyright &copy; <script>
+            document.write(new Date().getFullYear());
+        </script> All rights reserved.<br>
         Для создания приложения были использованы открытые данные <a href="https://opendata.mkrf.ru/">Министерства культуры РФ</a>:<br>
         <a href="https://opendata.mkrf.ru/opendata/7705851331-theaters">Театральные площадки и коллективы</a>
     </footer>
