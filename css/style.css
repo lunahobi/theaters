@@ -5,10 +5,6 @@ body {
     color: rgb(var(--bs-tertiary-color-rgb));
 }
 
-/* Carousel base class */
-.carousel {
-    margin-bottom: 4rem;
-}
 
 /* Since positioning the image, we need to help out the caption */
 .carousel-caption {
@@ -90,4 +86,29 @@ footer {
 footer a {
     color: #14768b;
     text-decoration-color: #14768b;
+}
+
+#info {
+    background-color: #f5f1e7;
+}
+
+.img-small {
+    width: 20%;
+}
+
+.card {
+    height: 18rem;
+    --bs-card-title-color: #25204e;
+    background-color: #f5f1e7;
+}
+
+.card:hover {
+    box-shadow: 0px 16px 35px 0px rgba(0, 0, 2, 0.09);
+    border: 1px solid transparent;
+    text-decoration: none;
+}
+
+textarea {
+    border-radius: 0px;
+    height: 100% !important;
 }
