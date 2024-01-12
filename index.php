@@ -19,8 +19,6 @@
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="js/jquery.maskedinput.js"></script>
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/script.js"></script>
 </head>
@@ -61,7 +59,7 @@
             </div>
             <div class="carousel-inner">
                 <div id="carousel-1" class="carousel-item active">
-                    <div clsass="container">
+                    <div class="container">
                         <div class="carousel-caption text-start">
                             <h1 class='text-carousel-h1 d-none d-md-block'>Добро пожаловать на сайт с театральными плошадками и коллективами РФ!</h1>
                             <h1 class='text-carousel-h1 d-block d-md-none'>Добро пожаловать!</h1>
@@ -80,7 +78,7 @@
                                 и центр мировой музыкальной культуры, способствующий развитию театрального искусства страны</p>
                             <p class="text-carousel-p d-block d-md-none">Большой театр России всегда был и остается одним из основных символов нашего государства
                                 и его культуры</p>
-                            <p><a class="btn btn-lg btn-carousel" href="#">Подробнее</a></p>
+                            <p><a class="btn btn-lg btn-carousel" href="theater.php?id=998">Подробнее</a></p>
                         </div>
                     </div>
                 </div>
@@ -89,7 +87,7 @@
                         <div class="carousel-caption text-end">
                             <h1 class="text-carousel-h1">Мариинский театр</h1>
                             <p class="text-carousel-p">Театр оперы и балета в Санкт-Петербурге, один из ведущих музыкальных театров России и мира</p>
-                            <p><a class="btn btn-lg btn-carousel" href="#">Подробнее</a></p>
+                            <p><a class="btn btn-lg btn-carousel" href="theater.php?id=121">Подробнее</a></p>
                         </div>
                     </div>
                 </div>

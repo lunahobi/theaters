@@ -83,7 +83,7 @@ footer {
     transition: background-color 0.3s;
 }
 
-footer a {
+a {
     color: #14768b;
     text-decoration-color: #14768b;
 }
@@ -120,4 +120,8 @@ label.error{
 form input.error{
     border-color:red;
     box-shadow: 0px 0px 10px red;
+}
+
+#about_theater {
+    background-color: #f5f1e7;
 }
