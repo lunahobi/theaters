@@ -125,3 +125,11 @@ form input.error{
 #about_theater {
     background-color: #f5f1e7;
 }
+
+.icons div {
+    line-height: 1rem;
+}
+
+.hstack {
+    align-items: flex-start;
+}

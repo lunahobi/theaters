@@ -69,16 +69,15 @@
                             <div class="carousel-inner">
                                 <!-- Слайды будут добавлены динамически с использованием JavaScript -->
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#imageSlider" data-bs-slide="prev">
+                            <button class="carousel-control-prev d-none" type="button" data-bs-target="#imageSlider" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Previous</span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#imageSlider" data-bs-slide="next">
+                            <button class="carousel-control-next d-none" type="button" data-bs-target="#imageSlider" data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </button>
                         </div>
-
 
                         <script>
                             $(document).ready(function() {
@@ -86,6 +85,8 @@
                                 $.getJSON('get_images.php?id=<?php echo $_GET['id']; ?>', function(data) {
 
                                     var carouselInner = $('.carousel-inner');
+                                    var controlPrev = $('.carousel-control-prev');
+                                    var controlNext = $('.carousel-control-next');
 
                                     data.forEach(function(image, index) {
                                         var activeClass = index === 0 ? 'active' : '';
@@ -97,15 +98,178 @@
 
                                         carouselInner.append(carouselItem);
                                     });
-                                })
+
+                                    // Проверяем наличие фотографий
+                                    if (data.length > 1) {
+                                        // Показываем кнопки управления
+                                        controlPrev.removeClass('d-none');
+                                        controlNext.removeClass('d-none');
+                                    }
+                                });
                             });
                         </script>
                     </div>
-                    <div class="mt-3">
-                        <?php echo $result['Описание'] ?>
-                    </div>
 
                 </div>
+                <div class="row icons">
+
+                    <div class="col py-3 tel-block">
+                        <div class="hstack gap-2">
+                            <img src="img/telephone-black.svg" alt="telephone">
+                            <div class="tel">
+                                <?php
+                                // Ваш JSON-строка (здесь я предполагаю, что она хранится в переменной $jsonString)
+                                $jsonString = $result['Номер'];
+
+                                // Преобразование JSON в ассоциативный массив
+                                $data = json_decode($jsonString, true);
+
+                                // Проверка наличия данных
+                                if ($data) {
+                                    // Вывод данных
+                                    foreach ($data as $index => $item) {
+                                        $phoneNumber = $item['value'];
+                                        $comment = isset($item['comment']) ? $item['comment'] : null;
+
+                                        // Вывод иконки телефона и номера с комментарием
+                                        if (!empty($comment)) {
+                                            echo '+' . $phoneNumber . ' - ' . $comment;
+                                        } else {
+                                            echo '+' . $phoneNumber;
+                                        }
+
+                                        // Проверка, является ли текущий элемент последним в массиве
+                                        if ($index < count($data) - 1) {
+                                            // Если не последний, добавить переход на новую строку
+                                            echo '<br>';
+                                        }
+                                    }
+                                } else {
+                                    // Вывод сообщения, если JSON пуст
+                                    echo '<p>Нет данных</p>';
+                                    // Скрываем блок, если нет данных
+                                    echo '<style>.tel-block { display: none; }</style>';
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <?php if ($result['Адрес электронной почты'] !== null) : ?>
+                        <div class="col py-3">
+                            <div class="hstack gap-2">
+                                <img src="img/email-black.svg" alt="e-mail">
+                                <?= $result['Адрес электронной почты'] ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($result['Адрес'] !== null) : ?>
+                        <div class="col py-3">
+                            <div class="hstack gap-2">
+                                <img src="img/adress.svg" alt="adress">
+                                <?= $result['Адрес'] ?>
+                                <br><br>
+                                <?= $result['Примечание'] ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php
+                    // Определение функции allValuesNull
+                    function allValuesNull($array)
+                    {
+                        return count(array_filter($array, function ($value) {
+                            return $value !== null;
+                        })) === 0;
+                    }
+
+                    $query_hours = "SELECT ПН, ВТ, СР, ЧТ, ПТ, СБ, ВС FROM dataset WHERE id = ?;";
+                    $stmt = mysqli_prepare($mysql, $query_hours);
+
+                    $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+                    mysqli_stmt_bind_param($stmt, "i", $id);
+                    mysqli_stmt_execute($stmt);
+
+                    $result_hours = mysqli_stmt_get_result($stmt);
+
+                    // Проверка на успешность выполнения запроса
+                    if ($result_hours) {
+                        $row = mysqli_fetch_assoc($result_hours);
+
+                        // Список дней недели
+                        $daysOfWeek = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
+
+                        // Проверка наличия данных
+                        if (!empty($row) && !allValuesNull($row)) {
+                            echo '<div class="col py-3">';
+                            echo '<div class="hstack gap-2">';
+                            echo '<img src="img/clock.svg" alt="clock">';
+                            echo '<div>';
+
+                            $workingHoursString = '';
+
+                            foreach ($daysOfWeek as $day) {
+                                // Проверяем, есть ли значение для текущего дня
+                                if ($row[$day] !== null) {
+                                    $dayData = json_decode($row[$day], true);
+
+                                    $startTime = isset($dayData['from']) ? substr($dayData['from'], 0, 5) : null;
+                                    $endTime = isset($dayData['to']) ? substr($dayData['to'], 0, 5) : null;
+
+                                    if (!empty($workingHoursString)) {
+                                        $workingHoursString .= '<br>';
+                                    }
+
+                                    $workingHoursString .= $day . ': ' . $startTime . ' - ' . $endTime;
+                                } else {
+                                    // Если значение равно null, считаем, что это выходной
+                                    if (!empty($workingHoursString)) {
+                                        $workingHoursString .= '<br>';
+                                    }
+
+                                    $workingHoursString .= $day . ': выходной';
+                                }
+                            }
+
+                            // Вывод строки с рабочим временем
+                            echo $workingHoursString;
+
+                            echo '</div>';
+                            echo '</div>';
+                            echo '</div>';
+                        }
+                        // Освобождение ресурсов
+                        mysqli_free_result($result_hours);
+                    } else {
+                        // Вывод ошибки выполнения запроса
+                        echo "Ошибка выполнения запроса: " . mysqli_error($mysql);
+                    }
+
+                    // Закрытие запроса
+                    mysqli_stmt_close($stmt);
+
+                    // Закрытие соединения
+                    mysqli_close($mysql);
+                    ?>
+
+
+                    <?php if ($result['Адрес сайта'] !== null) : ?>
+                        <div class="col py-3">
+                            <div class="hstack gap-2">
+                                <img src="img/site.svg" alt="site">
+                                <a href="<?= $result['Адрес сайта'] ?>" target="_blank"><?= $result['Адрес сайта'] ?></a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="mt-3">
+                    <?php echo $result['Описание'] ?>
+                </div>
+
+
             </div>
 
         </section>
@@ -158,8 +322,8 @@
                     </div>
 
                     <div class="hstack gap-2 ">
-                        <a href="https://telegram.org/"><img src="img/telegram.svg" alt="telegram"></a>
-                        <a href="https://whatsapp.com/"><img src="img/whatsapp.svg" alt="whatsapp"></a>
+                        <a href="https://telegram.org/" target="_blank"><img src="img/telegram.svg" alt="telegram"></a>
+                        <a href="https://whatsapp.com/" target="_blank"><img src="img/whatsapp.svg" alt="whatsapp"></a>
                     </div>
                 </div>
             </div>
@@ -170,8 +334,8 @@
         Copyright &copy; <script>
             document.write(new Date().getFullYear());
         </script> All rights reserved.<br>
-        Для создания приложения были использованы открытые данные <a href="https://opendata.mkrf.ru/">Министерства культуры РФ</a>:<br>
-        <a href="https://opendata.mkrf.ru/opendata/7705851331-theaters">Театральные площадки и коллективы</a>
+        Для создания приложения были использованы открытые данные <a href="https://opendata.mkrf.ru/" target="_blank">Министерства культуры РФ</a>:<br>
+        <a href="https://opendata.mkrf.ru/opendata/7705851331-theaters" target="_blank">Театральные площадки и коллективы</a>
     </footer>
     <!-- Bootstrap JS и зависимости -->
     <script src="js/bootstrap.bundle.min.js"></script>

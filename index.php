@@ -20,7 +20,6 @@
     <link href="css/style.css" rel="stylesheet">
 
     <script src="js/jquery.validate.min.js"></script>
-    <script src="js/script.js"></script>
 </head>
 
 <body>
