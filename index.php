@@ -19,7 +19,8 @@
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
 
-    <script src="js/jquery.validate.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </head>
 
 <body>
@@ -41,9 +42,20 @@
                     <li class="nav-item">
                         <a class="nav-link" href="map.php">Карта</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Авторизация</a>
-                    </li>
+                    <?php
+                        session_start();
+                        if(empty($_SESSION['user'])){?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="autorization.php">Авторизация</a>
+                            </li>   
+                        <?php }
+                        if(!empty($_SESSION['user'])){?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="lk.php">Личный кабинет</a>
+                            </li>   
+                        <?php }
+                    ?>
+                    
                 </ul>
             </div>
         </div>
@@ -150,7 +162,7 @@
             <div class="row">
                 <h2 class="text-center">Контакты</h2>
                 <div class="col">
-                    <form action="" method="POST">
+                    <form action="actions/feedback.php" method="POST">
                         <div class="mb-3">
                             <label for="name" class="form-label">Имя</label>
                             <input type="text" class="form-control" id="name" name="name" required>
@@ -165,18 +177,8 @@
                         </div>
                         <div class="text-center">
                             <button id='btn-contacts' type="submit" class="btn">Отправить</button>
-                            <div class="status"></div>
                         </div>
                     </form>
-                    <?php
-
-                    include "db.php";
-                    if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['message'])) {
-                        $query = "INSERT INTO `messages` (`name`, `email`, `message`) VALUES ('{$_POST['name']}', '{$_POST['email']}', '{$_POST['message']}')";
-
-                        $result = mysqli_query($mysql, $query);
-                    }
-                    ?>
 
                 </div>
                 <div class="col py-3">

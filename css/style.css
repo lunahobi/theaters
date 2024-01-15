@@ -113,16 +113,18 @@ textarea {
     height: 100% !important;
 }
 
-label.error{
-    display: none!important;
+label.error {
+    display: none !important;
 }
 
-form input.error{
-    border-color:red;
+form input.error {
+    border-color: red;
     box-shadow: 0px 0px 10px red;
 }
 
-#about_theater {
+#about_theater,
+#reg,
+#auth {
     background-color: #f5f1e7;
 }
 
@@ -132,4 +134,52 @@ form input.error{
 
 .hstack {
     align-items: flex-start;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.btn-block {
+    --mdb-btn-margin-top: 0.5rem;
+    display: block;
+    width: 100%;
+}
+
+.form-outline .form-control {
+    min-height: auto;
+    padding-top: 0.32rem;
+    padding-bottom: 0.32rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    background: rgba(0, 0, 0, 0);
+    transition: all .2s linear;
+}
+
+.btn-auth {
+    background-color: #14768b;
+}
+
+input[aria-invalid="true"] {
+    box-shadow: 0px 0px 5px red;
+}
+
+.notice {
+    padding: 10px;
+    border-radius: 6px;
+    margin: 20px auto;
+}
+
+.notice.error {
+    border: 2px solid #762c2c;
+    background: #f3d3d3;
+    color: #762c2c;
+}
+
+.notice.success {
+    border: 2px solid #2c742b;
+    background: #e1fee3;
+    color: #2c742b;
 }

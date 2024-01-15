@@ -282,7 +282,7 @@
             <div class="row">
                 <h2 class="text-center">Контакты</h2>
                 <div class="col">
-                    <form action="" method="POST">
+                    <form action="feedback.php" method="POST">
                         <div class="mb-3">
                             <label for="name" class="form-label">Имя</label>
                             <input type="text" class="form-control" id="name" name="name" required>
@@ -297,17 +297,8 @@
                         </div>
                         <div class="text-center">
                             <button id='btn-contacts' type="submit" class="btn">Отправить</button>
-                            <div class="status"></div>
                         </div>
                     </form>
-                    <?php
-
-                    if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['message'])) {
-                        $query = "INSERT INTO `messages` (`name`, `email`, `message`) VALUES ('{$_POST['name']}', '{$_POST['email']}', '{$_POST['message']}')";
-
-                        $result = mysqli_query($mysql, $query);
-                    }
-                    ?>
 
                 </div>
                 <div class="col py-3">
