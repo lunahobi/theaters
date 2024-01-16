@@ -3,6 +3,7 @@
 
 <?php
 require_once __DIR__ . '/helpers.php';
+checkGuest();
 ?>
 
 <head>
@@ -38,7 +39,7 @@ require_once __DIR__ . '/helpers.php';
                         <a class="nav-link" href="index.php">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">О нас</a>
+                        <a class="nav-link" href="theaters.php">Список</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="map.php">Карта</a>
@@ -51,7 +52,7 @@ require_once __DIR__ . '/helpers.php';
         </div>
     </nav>
 
-    <main id = "reg">
+    <main id="reg">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-10">
@@ -59,14 +60,14 @@ require_once __DIR__ . '/helpers.php';
                     <div class="form mb-5">
                         <form action="actions/reg.php" method="post" style="width: 22rem;">
                             <div class="form-outline mb-4">
-                                <input type="text" id="fio" name='fio' class="form-control" placeholder="Имя" <?php echo validationErrorAttr('fio') ?> value=<?php echo old('fio')?> >
+                                <input type="text" id="fio" name='fio' class="form-control" placeholder="Имя" <?php echo validationErrorAttr('fio') ?> value=<?php echo old('fio') ?>>
                                 <?php if (hasValidationError('fio')) : ?>
                                     <small><?php echo validationErrorMessage('fio'); ?></small>
                                 <?php endif; ?>
                             </div>
 
                             <div class="form-outline mb-4">
-                                <input type="text" id="e-mail" name='e-mail' class="form-control" placeholder="E-mail" readonly onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly','');" <?php echo validationErrorAttr('e-mail') ?> value=<?php echo old('e-mail')?>>
+                                <input type="text" id="e-mail" name='e-mail' class="form-control" placeholder="E-mail" readonly onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly','');" <?php echo validationErrorAttr('e-mail') ?> value=<?php echo old('e-mail') ?>>
                                 <?php if (hasValidationError('e-mail')) : ?>
                                     <small><?php echo validationErrorMessage('e-mail'); ?></small>
                                 <?php endif; ?>
@@ -99,7 +100,7 @@ require_once __DIR__ . '/helpers.php';
                                 <p>У вас уже есть аккаунт? <a href="autorization.php">Войти</a></p>
                             </div>
                         </form>
-                        <?php clearValidation()?>
+                        <?php clearValidation() ?>
                     </div>
 
                 </div>

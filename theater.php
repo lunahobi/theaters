@@ -37,14 +37,24 @@
                         <a class="nav-link" href="index.php">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">О нас</a>
+                        <a class="nav-link" href="theaters.php">Список</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="map.php">Карта</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Авторизация</a>
-                    </li>
+                    <?php
+                    if (!isset($_SESSION)) session_start();
+                    if (empty($_SESSION['user'])) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="autorization.php">Авторизация</a>
+                        </li>
+                    <?php }
+                    if (!empty($_SESSION['user'])) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="lk.php">Личный кабинет</a>
+                        </li>
+                    <?php }
+                    ?>
                 </ul>
             </div>
         </div>
@@ -59,6 +69,13 @@
 
                     $query = mysqli_query($mysql, 'SELECT * FROM dataset WHERE id=' . $_GET['id'] . ';');
                     $result = mysqli_fetch_array($query);
+
+                    $jsonCoordinates = json_decode($result['На карте'], true);
+                    // Поменять координаты местами
+                    $coordinates = [
+                        'latitude' => $jsonCoordinates['coordinates'][1],
+                        'longitude' => $jsonCoordinates['coordinates'][0],
+                    ];
                     echo '<h2 class="text-center">' . $result['Название'] . '</h2>';
 
 
@@ -111,6 +128,67 @@
                     </div>
 
                 </div>
+                <div class="rows text-center mt-3">
+                    <div class="col">
+                        <div id="theaterInfo" data-theater-id="<?= $theaterId ?>"></div>
+
+                        <?php
+                        $theaterId = $_GET['id'];
+                        $query = "SELECT * FROM dataset WHERE id = ?";
+                        $stmt = mysqli_prepare($mysql, $query);
+                        mysqli_stmt_bind_param($stmt, "i", $theaterId);
+                        mysqli_stmt_execute($stmt);
+                        $res = mysqli_stmt_get_result($stmt);
+                        $theater = mysqli_fetch_assoc($res);
+
+                        $isFavorite = false;
+                        if (isset($_SESSION['user']['id'])) {
+                            // Замените это на ваш код проверки (например, запрос к базе данных)
+                            $userId = $_SESSION['user']['id'];
+                            $queryCheckFavorite = "SELECT * FROM favourites WHERE user_id = ? AND theater_id = ?";
+                            $stmtCheckFavorite = mysqli_prepare($mysql, $queryCheckFavorite);
+                            mysqli_stmt_bind_param($stmtCheckFavorite, "ii", $userId, $theaterId);
+                            mysqli_stmt_execute($stmtCheckFavorite);
+                            $resultCheckFavorite = mysqli_stmt_get_result($stmtCheckFavorite);
+                            $isFavorite = mysqli_num_rows($resultCheckFavorite) > 0;
+                        }
+
+                        // Вывод кнопок в зависимости от авторизации и наличия в избранном
+                        if (isset($_SESSION['user']['id'])) {
+                            if ($isFavorite) {
+                                echo '<button class="btn btn-danger" onclick="removeFromFavorites(' . $theaterId . ')">Удалить из избранного</button>';
+                            } else {
+                                echo '<button class="btn btn-success" onclick="addToFavorites(' . $theaterId . ')">Добавить в избранное</button>';
+                            }
+                        }
+                        ?>
+
+                        <script>
+                            var theaterId = document.getElementById('theaterInfo').dataset.theaterId;
+
+                            function addToFavorites(theaterId) {
+                                $.post("actions/add_to_favourites.php", {
+                                    theaterId: theaterId
+                                }, function(data) {
+                                    alert(data);
+                                    window.location.reload();
+                                });
+                            }
+
+                            function removeFromFavorites(theaterId) {
+                                $.post("actions/remove_from_favourites.php", {
+                                    theaterId: theaterId
+                                }, function(data) {
+                                    alert(data);
+                                    window.location.reload();
+                                });
+                            }
+                        </script>
+                    </div>
+                </div>
+                <div class="row mt-3 text-center">
+                    <a href="map.php?latitude=<?= $coordinates['latitude'] ?>&longitude=<?= $coordinates['longitude'] ?>">Показать на карте</a>
+                </div>
                 <div class="row icons">
 
                     <div class="col py-3 tel-block">
@@ -156,6 +234,8 @@
                     </div>
 
 
+
+
                     <?php if ($result['Адрес электронной почты'] !== null) : ?>
                         <div class="col py-3">
                             <div class="hstack gap-2">
@@ -166,6 +246,7 @@
                     <?php endif; ?>
 
                     <?php if ($result['Адрес'] !== null) : ?>
+
                         <div class="col py-3">
                             <div class="hstack gap-2">
                                 <img src="img/adress.svg" alt="adress">

@@ -5,6 +5,8 @@
 
 require_once __DIR__ . '/helpers.php';
 
+checkGuest();
+
 ?>
 
 <head>
@@ -40,7 +42,7 @@ require_once __DIR__ . '/helpers.php';
                         <a class="nav-link" href="index.php">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">О нас</a>
+                        <a class="nav-link" href="theaters.php">Список</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="map.php">Карта</a>
@@ -61,7 +63,7 @@ require_once __DIR__ . '/helpers.php';
 
                     <?php if (hasMessage('error')) : ?>
                         <div class="notice error" style="width: 22rem">
-                            <?=getMessage('error') ?>
+                            <?= getMessage('error') ?>
                         </div>
                     <?php endif; ?>
                     <div class="form mb-5">

@@ -33,4 +33,4 @@ if (!password_verify($password, $user['password']))
 
 $_SESSION['user']['id'] = $user['id'];
 
-redirect('/');
+redirect('/lk.php');

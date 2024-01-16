@@ -64,4 +64,4 @@ try {
 } catch (\Exception $e) {
     die("Connection error {$e->getMessage()}");
 }
-redirect('/');
+redirect('/lk.php');

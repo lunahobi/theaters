@@ -35,14 +35,15 @@ footer {
     color: white;
 }
 
-.btn-carousel {
+.btn-carousel, .btn-tr, .btn-lk, .btn-auth {
     background-color: #14768b;
     color: white;
 }
 
-.btn-carousel:hover {
+.btn-carousel:hover, .btn-tr:hover, .btn-lk:hover, .btn-auth:hover {
     background-color: #0a467e;
     transition: background-color 0.3s;
+    color: white;
 }
 
 
@@ -124,7 +125,9 @@ form input.error {
 
 #about_theater,
 #reg,
-#auth {
+#auth,
+#cart,
+#card {
     background-color: #f5f1e7;
 }
 
@@ -158,10 +161,6 @@ form input.error {
     transition: all .2s linear;
 }
 
-.btn-auth {
-    background-color: #14768b;
-}
-
 input[aria-invalid="true"] {
     box-shadow: 0px 0px 5px red;
 }
@@ -182,4 +181,12 @@ input[aria-invalid="true"] {
     border: 2px solid #2c742b;
     background: #e1fee3;
     color: #2c742b;
+}
+
+#map {
+    height: 30rem;
+}
+
+[class*="copyrights-pane"] {
+	display: none !important;
 }

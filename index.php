@@ -37,13 +37,13 @@
                         <a class="nav-link active" href="index.php">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">О нас</a>
+                        <a class="nav-link" href="theaters.php">Список</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="map.php">Карта</a>
                     </li>
                     <?php
-                        session_start();
+                        if (!isset($_SESSION)) session_start();
                         if(empty($_SESSION['user'])){?>
                             <li class="nav-item">
                                 <a class="nav-link" href="autorization.php">Авторизация</a>
@@ -142,7 +142,7 @@
                     </div>
 
                     <div class="col-lg-3 col-md-4 col-10">
-                        <a href="authorization.php" style="text-decoration: none;">
+                        <a href="autorization.php" style="text-decoration: none;">
                             <div class="card align-items-center justify-content-center">
                                 <img src="img/route.svg" class="card-img-top img-small img-fluid mt-4" alt="route">
                                 <div class="card-body">

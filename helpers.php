@@ -84,4 +84,37 @@ function findUser(string $email): array|bool
     return $stmt->fetch(\PDO::FETCH_ASSOC);
 }
 
-redirect('/');
+function currentUser(): array|false
+{
+    $pdo = getPDO();
+
+    if (!isset($_SESSION['user'])) {
+        return false;
+    }
+
+    $userId = $_SESSION['user']['id'] ?? null;
+
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE `id`=:id");
+    $stmt->execute([':id' => $userId]);
+    return $stmt->fetch(\PDO::FETCH_ASSOC);
+}
+
+function logout()
+{
+    unset($_SESSION['user']['id']);
+    redirect('/autorization.php');
+}
+
+function checkAuth(): void
+{
+    if(!isset($_SESSION['user']['id'])){
+        redirect('/');
+    }
+}
+
+function checkGuest(): void
+{
+    if(isset($_SESSION['user']['id'])){
+        redirect('/lk.php');
+    }
+}
