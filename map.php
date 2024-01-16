@@ -43,7 +43,7 @@ while ($location = mysqli_fetch_assoc($query)) {
 
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=0faebaf6-e7b9-4477-a86a-856306dfa79c&lang=ru_RU" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=949c419f-7cb8-41ba-9e1b-e7c3f69e0086&lang=ru_RU" type="text/javascript"></script>
 
 </head>
 

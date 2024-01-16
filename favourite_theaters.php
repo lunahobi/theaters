@@ -60,10 +60,10 @@
         </div>
     </nav>
     <main id="fav">
-        <div class="container mt-4">
+        <div class="container">
 
             <div class="row">
-                <h3 class="text-center mb-3">Избранное</h3>
+                <h3 class="text-center mt-5 mb-3">Избранное</h3>
                 <?php
                 include "db.php";
                 $userId = $_SESSION['user']['id'];

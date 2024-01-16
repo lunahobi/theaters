@@ -148,25 +148,26 @@
                 }
 
                 if (!empty($_GET['auditory'])) {
-                    $query .= (empty($_GET['category']) ? " WHERE" : " AND"). " `Аудитория` = '" . $_GET['auditory'] . "'";
+                    $query .= (empty($_GET['category']) ? " WHERE" : " AND") . " `Аудитория` = '" . $_GET['auditory'] . "'";
                 }
 
                 $result = mysqli_query($mysql, $query);
-
-                // Вывод карточек театров
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $main_image = json_decode($row['Изображение'], true);
-                    echo '<div class="col-md-4 mb-4">';
-                    echo '<div class="card text-black" style="background-color: #f5f1e7">';
-                    echo '<div class="card-body">';
-                    echo '<h5 class="card-title">' . $row['Название'] . '</h5>';
-                    echo '<p class="card-text">' . $row['Местоположение'] . '</p>';
-                    echo '<p class="card-text"> Категория: ' . $row['Категория учреждения'] . '</p>';
-                    echo '<p class="card-text"> Аудитория: ' . $row['Аудитория'] . '</p>';
-                    echo '<a href="theater.php?id=' . $row['id'] . '" class="btn btn-primary btn-tr text-center">Подробнее</a>';
-                    echo '</div>';
-                    echo '</div>';
-                    echo '</div>';
+                if (isset($_GET['location'])) {
+                    // Вывод карточек театров
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $main_image = json_decode($row['Изображение'], true);
+                        echo '<div class="col-md-4 mb-4">';
+                        echo '<div class="card text-black" style="background-color: #f5f1e7">';
+                        echo '<div class="card-body">';
+                        echo '<h5 class="card-title">' . $row['Название'] . '</h5>';
+                        echo '<p class="card-text">' . $row['Местоположение'] . '</p>';
+                        echo '<p class="card-text"> Категория: ' . $row['Категория учреждения'] . '</p>';
+                        echo '<p class="card-text"> Аудитория: ' . $row['Аудитория'] . '</p>';
+                        echo '<a href="theater.php?id=' . $row['id'] . '" class="btn btn-primary btn-tr text-center">Подробнее</a>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
                 }
 
                 // Закрытие соединения

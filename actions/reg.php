@@ -32,8 +32,6 @@ if ($password != $passwordConfirmation) {
 }
 
 
-
-
 $pdo = getPDO();
 
 // Проверка наличия пользователя с указанным email
@@ -64,4 +62,4 @@ try {
 } catch (\Exception $e) {
     die("Connection error {$e->getMessage()}");
 }
-redirect('/lk.php');
+redirect('/autorization.php');
