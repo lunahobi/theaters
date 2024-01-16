@@ -146,7 +146,7 @@
                             <div class="card align-items-center justify-content-center">
                                 <img src="img/route.svg" class="card-img-top img-small img-fluid mt-4" alt="route">
                                 <div class="card-body">
-                                    <h6 class="card-title text-center">Добавить театры в избранное и проложить удобный маршрут от выбранного вами места до театров<br> (необходима авторизация)</h6>
+                                    <h6 class="card-title text-center">Добавить театры в избранное и проложить удобный маршрут от текущего местоположения до театров<br> (необходима авторизация)</h6>
                                 </div>
                             </div>
                         </a>
@@ -193,8 +193,8 @@
                     </div>
 
                     <div class="hstack gap-2 ">
-                        <a href="https://telegram.org/"><img src="img/telegram.svg" alt="telegram"></a>
-                        <a href="https://whatsapp.com/"><img src="img/whatsapp.svg" alt="whatsapp"></a>
+                        <a href="https://telegram.org/" target="_blank"><img src="img/telegram.svg" alt="telegram"></a>
+                        <a href="https://whatsapp.com/" target="_blank"><img src="img/whatsapp.svg" alt="whatsapp"></a>
                     </div>
                 </div>
             </div>
@@ -205,8 +205,8 @@
         Copyright &copy; <script>
             document.write(new Date().getFullYear());
         </script> All rights reserved.<br>
-        Для создания приложения были использованы открытые данные <a href="https://opendata.mkrf.ru/">Министерства культуры РФ</a>:<br>
-        <a href="https://opendata.mkrf.ru/opendata/7705851331-theaters">Театральные площадки и коллективы</a>
+        Для создания приложения были использованы открытые данные <a href="https://opendata.mkrf.ru/" target="_blank">Министерства культуры РФ</a>:<br>
+        <a href="https://opendata.mkrf.ru/opendata/7705851331-theaters" target="_blank">Театральные площадки и коллективы</a>
     </footer>
     <!-- Bootstrap JS и зависимости -->
     <script src="js/bootstrap.bundle.min.js"></script>

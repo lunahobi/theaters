@@ -190,3 +190,7 @@ input[aria-invalid="true"] {
 [class*="copyrights-pane"] {
 	display: none !important;
 }
+
+#fav {
+    min-height: 10rem;
+}

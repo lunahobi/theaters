@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-
-require_once __DIR__ . '/helpers.php';
-checkAuth();
-$user = currentUser();
-?>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,9 +18,12 @@ $user = currentUser();
 
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 </head>
 
-<body>
+<body id="card">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top d-flex flex-wrap">
         <div class="container">
             <a class="navbar-brand d-flex me-md-auto" href="index.php">Театры России</a>
@@ -46,37 +42,68 @@ $user = currentUser();
                     <li class="nav-item">
                         <a class="nav-link" href="map.php">Карта</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="lk.php">Личный кабинет</a>
-                    </li>
+                    <?php
+                    if (!isset($_SESSION)) session_start();
+                    if (empty($_SESSION['user'])) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="autorization.php">Авторизация</a>
+                        </li>
+                    <?php }
+                    if (!empty($_SESSION['user'])) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="lk.php">Личный кабинет</a>
+                        </li>
+                    <?php }
+                    ?>
                 </ul>
             </div>
         </div>
     </nav>
+    <main id="fav">
+        <div class="container mt-4">
 
-    <main id="auth">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col">
-                    <h3 class="mt-5 mb-3 text-center">Личный кабинет</h3>
-                    <h5>Добро пожаловать, <?= $user['name'] ?>!</h5>
-                    <a href="favourite_theaters.php" class="btn btn-lk mb-2">Избранное</a>
-                    <form action="actions/logout.php" method="post">
-                        <button class="btn btn-lk mb-5">Выйти из аккаунта</button>
-                    </form>
-                </div>
+            <div class="row">
+                <h3 class="text-center mb-3">Избранное</h3>
+                <?php
+                include "db.php";
+                $userId = $_SESSION['user']['id'];
+
+                // Получение избранных театров для текущего пользователя
+                $query = "SELECT dataset.* FROM dataset JOIN favourites ON dataset.id = favourites.theater_id WHERE favourites.user_id = ?";
+                $stmt = mysqli_prepare($mysql, $query);
+                mysqli_stmt_bind_param($stmt, "i", $userId);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+
+                // Вывод карточек театров
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $main_image = json_decode($row['Изображение'], true);
+                    echo '<div class="col-md-4 mb-4">';
+                    echo '<div class="card text-black" style="background-color: #f5f1e7">';
+                    echo '<div class="card-body">';
+                    echo '<h5 class="card-title">' . $row['Название'] . '</h5>';
+                    echo '<p class="card-text">' . $row['Местоположение'] . '</p>';
+                    echo '<p class="card-text"> Категория: ' . $row['Категория учреждения'] . '</p>';
+                    echo '<p class="card-text"> Аудитория: ' . $row['Аудитория'] . '</p>';
+                    echo '<a href="theater.php?id=' . $row['id'] . '" class="btn btn-primary btn-tr text-center">Подробнее</a>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+
+                // Закрытие соединения
+                mysqli_close($mysql);
+                ?>
             </div>
         </div>
-
     </main>
-
     <!-- Форма обратной связи и контакты -->
     <section id='contacts' class="py-5">
         <div class="container mw-80">
             <div class="row">
                 <h2 class="text-center">Контакты</h2>
                 <div class="col">
-                    <form action="actions/feedback.php" method="POST">
+                    <form action="feedback.php" method="POST">
                         <div class="mb-3">
                             <label for="name" class="form-label">Имя</label>
                             <input type="text" class="form-control" id="name" name="name" required>
@@ -91,7 +118,6 @@ $user = currentUser();
                         </div>
                         <div class="text-center">
                             <button id='btn-contacts' type="submit" class="btn">Отправить</button>
-                            <div class="status"></div>
                         </div>
                     </form>
 

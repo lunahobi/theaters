@@ -189,6 +189,9 @@
                 <div class="row mt-3 text-center">
                     <a href="map.php?latitude=<?= $coordinates['latitude'] ?>&longitude=<?= $coordinates['longitude'] ?>">Показать на карте</a>
                 </div>
+                <div class="row mt-3 text-center">
+                    <a href="map.php?latitude=<?= $coordinates['latitude'] ?>&longitude=<?= $coordinates['longitude'] ?>&fav=1">Построить маршрут</a>
+                </div>
                 <div class="row icons">
 
                     <div class="col py-3 tel-block">

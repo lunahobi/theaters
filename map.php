@@ -44,6 +44,7 @@ while ($location = mysqli_fetch_assoc($query)) {
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
     <script src="https://api-maps.yandex.ru/2.1/?apikey=0faebaf6-e7b9-4477-a86a-856306dfa79c&lang=ru_RU" type="text/javascript"></script>
+
 </head>
 
 <body id="cart">
@@ -86,44 +87,138 @@ while ($location = mysqli_fetch_assoc($query)) {
         <div class="container-fluid">
             <div id="map" class="mt-5 mb-5">
                 <script>
-                    function init() {
-                        var customLatitude = <?= isset($_GET['latitude']) ? floatval($_GET['latitude']) : 63.60766003438781 ?>;
-                        var customLongitude = <?= isset($_GET['longitude']) ? floatval($_GET['longitude']) : 97.76806979477598 ?>;
-                        var customZoom = <?= isset($_GET['latitude']) ? 18 : 4 ?>;
+                    <?php
+                    if (!isset($_GET['fav'])) { ?>
 
-                        var myMap = new ymaps.Map("map", {
-                            center: [customLatitude, customLongitude],
-                            zoom: customZoom,
-                        });
+                        function init() {
+                            var customLatitude = <?= isset($_GET['latitude']) ? floatval($_GET['latitude']) : 63.60766003438781 ?>;
+                            var customLongitude = <?= isset($_GET['longitude']) ? floatval($_GET['longitude']) : 97.76806979477598 ?>;
+                            var customZoom = <?= isset($_GET['latitude']) ? 18 : 4 ?>;
 
-                        var myClusterer = new ymaps.Clusterer();
-                        var coordinates = <?= json_encode($coordinates, JSON_NUMERIC_CHECK) ?>;
-                        var name = <?= json_encode($names) ?>;
-                        var id = <?= json_encode($ides) ?>;
-
-                        for (var i = 1; i < coordinates.length; i++) {
-                            myPlacemark = new ymaps.Placemark([coordinates[i]['latitude'], coordinates[i]['longitude']], {
-                                balloonContentHeader: name[i],
-                                balloonContentFooter: '<a href="theater.php?id=' + id[i] + '">Подробнее</a>',
-                                hintContent: name[i]
+                            var myMap = new ymaps.Map("map", {
+                                center: [customLatitude, customLongitude],
+                                zoom: customZoom,
                             });
-                            myMap.geoObjects.add(myPlacemark);
-                            myClusterer.add(myPlacemark);
-                        };
-                        myMap.geoObjects.add(myClusterer);
+
+                            var myClusterer = new ymaps.Clusterer();
+                            var coordinates = <?= json_encode($coordinates, JSON_NUMERIC_CHECK) ?>;
+                            var name = <?= json_encode($names) ?>;
+                            var id = <?= json_encode($ides) ?>;
+
+                            for (var i = 1; i < coordinates.length; i++) {
+                                myPlacemark = new ymaps.Placemark([coordinates[i]['latitude'], coordinates[i]['longitude']], {
+                                    balloonContentHeader: name[i],
+                                    balloonContentFooter: '<a href="theater.php?id=' + id[i] + '">Подробнее</a>',
+                                    hintContent: name[i]
+                                });
+                                myMap.geoObjects.add(myPlacemark);
+                                myClusterer.add(myPlacemark);
+                            };
+                            myMap.geoObjects.add(myClusterer);
+
+                            var searchControl = new ymaps.control.SearchControl({
+                                options: {
+                                    // Будет производиться поиск по топонимам и организациям.
+                                    provider: 'yandex#map',
+                                    noPlacemark: true
+                                }
+                            });
+                            myMap.controls.add(searchControl);
 
 
-                        // // Удаление ненужных элементов управления
-                        myMap.controls.remove('geolocationControl');
-                        myMap.controls.remove('trafficControl');
-                        myMap.controls.remove('typeSelector');
-                        myMap.controls.remove('fullscreenControl');
-                        myMap.controls.remove('zoomControl');
-                        myMap.controls.remove('rulerControl');
-                        myMap.controls.remove('searchControl')
+                            // // Удаление ненужных элементов управления
+                            myMap.controls.remove('geolocationControl');
+                            myMap.controls.remove('trafficControl');
+                            myMap.controls.remove('typeSelector');
+                            myMap.controls.remove('fullscreenControl');
+                            myMap.controls.remove('zoomControl');
+                            myMap.controls.remove('rulerControl');
+                            myMap.controls.remove('searchControl')
+                        }
+                        ymaps.ready(init);
+                    <?php };
+                    if (isset($_GET['fav'])) { ?>
 
-                    }
-                    ymaps.ready(init);
+                        function init() {
+                            var customLatitude = <?= floatval($_GET['latitude']) ?>;
+                            var customLongitude = <?= floatval($_GET['longitude']) ?>;
+                            var customZoom = 15;
+
+                            var myMap = new ymaps.Map("map", {
+                                center: [customLatitude, customLongitude],
+                                zoom: 15
+                                // controls: ['routePanelControl']
+                            });
+
+                            const routePanel = new ymaps.control.RoutePanel({
+                                options: {
+                                    types: {
+                                        masstransit: true,
+                                        pedestrian: true,
+                                        taxi: true
+                                    }
+                                }
+                            });
+
+                            myMap.controls.add(routePanel);
+
+                            const options = {
+                                enableHighAccuracy: true,
+                                timeout: 5000,
+                                maximumAge: 0
+                            };
+
+                            function success(pos) {
+                                const crd = pos.coords;
+
+                                console.log(`Latitude: ${crd.latitude}`);
+                                console.log(`Longitude: ${crd.longitude}`);
+
+                                const reverseGeocoder = ymaps.geocode([crd.latitude, crd.longitude]);
+                                let locationText = null;
+
+                                const reverseGeocoder2 = ymaps.geocode([customLatitude, customLongitude]);
+                                let locationText2 = null;
+
+                                reverseGeocoder.then(function(res) {
+                                    locationText = res.geoObjects.get(0).properties.get('text');
+
+                                    reverseGeocoder2.then(function(res) {
+                                        locationText2 = res.geoObjects.get(0).properties.get('text');
+
+                                        routePanel.routePanel.state.set({
+                                            type: 'masstransit',
+                                            fromEnabled: true,
+                                            from: locationText,
+                                            toEnabled: false,
+                                            to: locationText2,
+                                        });
+                                    });
+                                });
+                            }
+
+                            function error(err) {
+                                console.warn(`ERROR(${err.code}): ${err.message}`);
+                            }
+
+                            navigator.geolocation.getCurrentPosition(success, error, options);
+
+
+                            
+
+                            myMap.controls.remove('geolocationControl');
+                            myMap.controls.remove('trafficControl');
+                            myMap.controls.remove('typeSelector');
+                            myMap.controls.remove('fullscreenControl');
+                            myMap.controls.remove('zoomControl');
+                            myMap.controls.remove('rulerControl');
+                            myMap.controls.remove('searchControl')
+                        }
+
+                        ymaps.ready(init);
+
+
+                    <?php } ?>
                 </script>
             </div>
         </div>
@@ -180,8 +275,8 @@ while ($location = mysqli_fetch_assoc($query)) {
         Copyright &copy; <script>
             document.write(new Date().getFullYear());
         </script> All rights reserved.<br>
-        Для создания приложения были использованы открытые данные <a href="https://opendata.mkrf.ru/">Министерства культуры РФ</a>:<br>
-        <a href="https://opendata.mkrf.ru/opendata/7705851331-theaters">Театральные площадки и коллективы</a>
+        Для создания приложения были использованы открытые данные <a href="https://opendata.mkrf.ru/" target="_blank">Министерства культуры РФ</a>:<br>
+        <a href="https://opendata.mkrf.ru/opendata/7705851331-theaters" target="_blank">Театральные площадки и коллективы</a>
     </footer>
     <!-- Bootstrap JS и зависимости -->
     <script src="js/bootstrap.bundle.min.js"></script>

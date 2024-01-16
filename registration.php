@@ -158,8 +158,8 @@ checkGuest();
         Copyright &copy; <script>
             document.write(new Date().getFullYear());
         </script> All rights reserved.<br>
-        Для создания приложения были использованы открытые данные <a href="https://opendata.mkrf.ru/">Министерства культуры РФ</a>:<br>
-        <a href="https://opendata.mkrf.ru/opendata/7705851331-theaters">Театральные площадки и коллективы</a>
+        Для создания приложения были использованы открытые данные <a href="https://opendata.mkrf.ru/" target="_blank">Министерства культуры РФ</a>:<br>
+        <a href="https://opendata.mkrf.ru/opendata/7705851331-theaters" target="_blank">Театральные площадки и коллективы</a>
     </footer>
     <!-- Bootstrap JS и зависимости -->
     <script src="js/bootstrap.bundle.min.js"></script>
