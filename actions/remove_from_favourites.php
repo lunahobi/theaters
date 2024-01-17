@@ -1,5 +1,6 @@
 <?php
-include "db.php";
+
+include "mysql/Theaters_DB_Access.php";
 session_start();
 
 
@@ -11,13 +12,9 @@ $userId = $_SESSION['user']['id'];
 // Получение данных из AJAX-запроса
 $theaterId = $_POST['theaterId'];
 
-// Удаление из избранного
-$query = "DELETE FROM favourites WHERE user_id = ? AND theater_id = ?";
-$stmt = mysqli_prepare($mysql, $query);
-mysqli_stmt_bind_param($stmt, "ii", $userId, $theaterId);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
 
-mysqli_close($mysql);
+$conn = new Theater_DB_Access;
+$conn->prepare_query("DELETE FROM favourites WHERE user_id = ? AND theater_id = ?");
+$conn->issue_query(array($userId, $theaterId));
 
 echo "Удалено из избранного";

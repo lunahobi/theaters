@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php
+include "mysql/Theaters_DB_Access.php";
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,10 +69,11 @@
             <div class="container mw-80">
                 <div class="row justify-content-center">
                     <?php
-                    include "db.php";
 
-                    $query = mysqli_query($mysql, 'SELECT * FROM dataset WHERE id=' . $_GET['id'] . ';');
-                    $result = mysqli_fetch_array($query);
+                    $conn = new Theater_DB_Access;
+                    $conn->prepare_query("SELECT * FROM dataset WHERE id=?");
+                    $conn->issue_query(array($_GET['id']));
+                    $result = $conn->fetch_array();
 
                     $jsonCoordinates = json_decode($result['На карте'], true);
                     // Поменять координаты местами
@@ -133,24 +138,20 @@
                         <div id="theaterInfo" data-theater-id="<?= $theaterId ?>"></div>
 
                         <?php
+                        $conn = new Theater_DB_Access;
                         $theaterId = $_GET['id'];
-                        $query = "SELECT * FROM dataset WHERE id = ?";
-                        $stmt = mysqli_prepare($mysql, $query);
-                        mysqli_stmt_bind_param($stmt, "i", $theaterId);
-                        mysqli_stmt_execute($stmt);
-                        $res = mysqli_stmt_get_result($stmt);
-                        $theater = mysqli_fetch_assoc($res);
+                        $conn->prepare_query("SELECT * FROM dataset WHERE id = ?");
+                        $res = $conn->issue_query(array($theaterId));
+                        $theater = $conn->fetch_array($res);
 
                         $isFavorite = false;
                         if (isset($_SESSION['user']['id'])) {
                             // Замените это на ваш код проверки (например, запрос к базе данных)
                             $userId = $_SESSION['user']['id'];
-                            $queryCheckFavorite = "SELECT * FROM favourites WHERE user_id = ? AND theater_id = ?";
-                            $stmtCheckFavorite = mysqli_prepare($mysql, $queryCheckFavorite);
-                            mysqli_stmt_bind_param($stmtCheckFavorite, "ii", $userId, $theaterId);
-                            mysqli_stmt_execute($stmtCheckFavorite);
-                            $resultCheckFavorite = mysqli_stmt_get_result($stmtCheckFavorite);
-                            $isFavorite = mysqli_num_rows($resultCheckFavorite) > 0;
+                            $conn = new Theater_DB_Access;
+                            $conn->prepare_query("SELECT * FROM favourites WHERE user_id = ? AND theater_id = ?");
+                            $resultCheckFavorite = $conn->issue_query(array($userId, $theaterId));
+                            $isFavorite = $conn->count_rows($resultCheckFavorite)>0;
                         }
 
                         // Вывод кнопок в зависимости от авторизации и наличия в избранном
@@ -269,18 +270,15 @@
                         })) === 0;
                     }
 
-                    $query_hours = "SELECT ПН, ВТ, СР, ЧТ, ПТ, СБ, ВС FROM dataset WHERE id = ?;";
-                    $stmt = mysqli_prepare($mysql, $query_hours);
-
                     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-                    mysqli_stmt_bind_param($stmt, "i", $id);
-                    mysqli_stmt_execute($stmt);
 
-                    $result_hours = mysqli_stmt_get_result($stmt);
+                    $conn = new Theater_DB_Access;
+                    $conn->prepare_query("SELECT ПН, ВТ, СР, ЧТ, ПТ, СБ, ВС FROM dataset WHERE id = ?;");
+                    $result_hours = $conn->issue_query(array($id));
 
                     // Проверка на успешность выполнения запроса
                     if ($result_hours) {
-                        $row = mysqli_fetch_assoc($result_hours);
+                        $row = $conn->fetch_array($result_hours);
 
                         // Список дней недели
                         $daysOfWeek = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
@@ -324,18 +322,7 @@
                             echo '</div>';
                             echo '</div>';
                         }
-                        // Освобождение ресурсов
-                        mysqli_free_result($result_hours);
-                    } else {
-                        // Вывод ошибки выполнения запроса
-                        echo "Ошибка выполнения запроса: " . mysqli_error($mysql);
                     }
-
-                    // Закрытие запроса
-                    mysqli_stmt_close($stmt);
-
-                    // Закрытие соединения
-                    mysqli_close($mysql);
                     ?>
 
 

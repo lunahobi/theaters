@@ -1,6 +1,6 @@
 <?php
 // Подключение к базе данных
-include "db.php";
+include "mysql/Theaters_DB_Access.php";
 session_start();
 
 if (!isset($_SESSION['user']['id'])) {
@@ -11,13 +11,8 @@ $userId = $_SESSION['user']['id'];
 // Получение данных из AJAX-запроса
 $theaterId = $_POST['theaterId'];
 
-// Добавление в избранное
-$query = "INSERT INTO favourites (user_id, theater_id) VALUES (?, ?)";
-$stmt = mysqli_prepare($mysql, $query);
-mysqli_stmt_bind_param($stmt, "ii", $userId, $theaterId);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
-
-mysqli_close($mysql);
+$conn = new Theater_DB_Access;
+$conn->prepare_query("INSERT INTO favourites (user_id, theater_id) VALUES (?, ?)");
+$conn->issue_query(array($userId, $theaterId));
 
 echo "Добавлено в избранное";

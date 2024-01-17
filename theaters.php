@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php
+include "mysql/Theaters_DB_Access.php";
+$conn = new Theater_DB_Access;
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,18 +78,13 @@
                                 <option value="">Выберите местоположение</option>
                                 <!-- Возможные варианты местоположения из базы данных -->
                                 <?php
-                                // Подключение к базе данных и выполнение запроса для получения уникальных местоположений
-                                include "db.php";
-                                $query_locations = "SELECT DISTINCT `Местоположение` FROM dataset";
-                                $result_locations = mysqli_query($mysql, $query_locations);
 
-                                while ($location = mysqli_fetch_assoc($result_locations)) {
+                                $conn->issue_query("SELECT DISTINCT `Местоположение` FROM dataset");
+
+                                while ($location = $conn->fetch_array()) {
                                     $selected = isset($_GET['location']) && $_GET['location'] === $location['Местоположение'] ? 'selected' : '';
                                     echo '<option value="' . $location['Местоположение'] . '" ' . $selected . '>' . $location['Местоположение'] . '</option>';
                                 }
-
-                                // Закрытие соединения
-                                mysqli_close($mysql);
                                 ?>
                             </select>
                         </div>
@@ -95,12 +95,10 @@
                                 <option value="">Выберите категорию</option>
                                 <!-- Возможные варианты категорий из базы данных -->
                                 <?php
-                                include "db.php";
-                                // Подключение к базе данных и выполнение запроса для получения уникальных категорий
-                                $query_categories = "SELECT DISTINCT `Категория учреждения` FROM dataset";
-                                $result_categories = mysqli_query($mysql, $query_categories);
 
-                                while ($category = mysqli_fetch_assoc($result_categories)) {
+                                $conn->issue_query("SELECT DISTINCT `Категория учреждения` FROM dataset");
+
+                                while ($category = $conn->fetch_array()) {
                                     $selected = isset($_GET['category']) && $_GET['category'] === $category['Категория учреждения'] ? 'selected' : '';
                                     echo '<option value="' . $category['Категория учреждения'] . '" ' . $selected . '>' . $category['Категория учреждения'] . '</option>';
                                 }
@@ -114,11 +112,10 @@
                                 <option value="">Выберите аудиторию</option>
                                 <!-- Возможные варианты категорий из базы данных -->
                                 <?php
-                                // Подключение к базе данных и выполнение запроса для получения уникальных категорий
-                                $query_auditories = "SELECT DISTINCT `Аудитория` FROM dataset";
-                                $result_auditories = mysqli_query($mysql, $query_auditories);
 
-                                while ($auditory = mysqli_fetch_assoc($result_auditories)) {
+                                $conn->issue_query("SELECT DISTINCT `Аудитория` FROM dataset");
+
+                                while ($auditory = $conn->fetch_array()) {
                                     $selected = isset($_GET['auditory']) && $_GET['auditory'] === $auditory['Аудитория'] ? 'selected' : '';
                                     echo '<option value="' . $auditory['Аудитория'] . '" ' . $selected . '>' . $auditory['Аудитория'] . '</option>';
                                 }
@@ -134,9 +131,9 @@
             <div class="row">
 
                 <?php
+                $conne = new Theater_DB_Access;
 
                 $query = "SELECT * FROM dataset";
-                $result = mysqli_query($mysql, $query);
 
                 // Добавление условий фильтрации, если они указаны в GET-параметрах
                 if (!empty($_GET['location'])) {
@@ -148,13 +145,14 @@
                 }
 
                 if (!empty($_GET['auditory'])) {
-                    $query .= (empty($_GET['category']) ? " WHERE" : " AND") . " `Аудитория` = '" . $_GET['auditory'] . "'";
+                    $query .= (empty($_GET['category']) ? (empty($_GET['location']) ? " WHERE" : " AND") : " AND") . " `Аудитория` = '" . $_GET['auditory'] . "'";
                 }
 
-                $result = mysqli_query($mysql, $query);
+                $result = $conne->issue_query($query);
+
                 if (isset($_GET['location'])) {
                     // Вывод карточек театров
-                    while ($row = mysqli_fetch_assoc($result)) {
+                    while ($row = $conne->fetch_array($result)) {
                         $main_image = json_decode($row['Изображение'], true);
                         echo '<div class="col-md-4 mb-4">';
                         echo '<div class="card text-black" style="background-color: #f5f1e7">';
@@ -169,9 +167,6 @@
                         echo '</div>';
                     }
                 }
-
-                // Закрытие соединения
-                mysqli_close($mysql);
                 ?>
             </div>
         </div>

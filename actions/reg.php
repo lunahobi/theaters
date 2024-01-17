@@ -31,18 +31,15 @@ if ($password != $passwordConfirmation) {
     addValidationError('pass', 'Пароли не совпадают');
 }
 
+$conn = connection();
 
-$pdo = getPDO();
+$conn->prepare_query("SELECT COUNT(*) FROM users WHERE email = ?");
+$conn->issue_query(array($email));
+$cnt = $conn->fetch_row()[0];
 
-// Проверка наличия пользователя с указанным email
-$checkQuery = "SELECT COUNT(*) FROM users WHERE email = :email";
-$checkStmt = $pdo->prepare($checkQuery);
-$checkStmt->bindParam(':email', $email, PDO::PARAM_STR);
-$checkStmt->execute();
-
-if ($checkStmt->fetchColumn() > 0) {
-    // Пользователь с таким email уже существует
+if ($cnt > 0) {
     addValidationError('e-mail', 'Пользователь с такой почтой уже существует');
+    echo $cnt;
 }
 
 if (!empty($_SESSION['validation'])) {
@@ -50,16 +47,8 @@ if (!empty($_SESSION['validation'])) {
     addOldValue('fio', $name);
     redirect("/registration.php");
 }
-// Продолжаем вставку, так как пользователя с таким email нет в базе
-$insertQuery = "INSERT INTO users (`name`, `email`, `password`) VALUES (:name, :email, :password)";
-$insertStmt = $pdo->prepare($insertQuery);
-$insertStmt->bindParam(':name', $name, PDO::PARAM_STR);
-$insertStmt->bindParam(':email', $email, PDO::PARAM_STR);
-$insertStmt->bindParam(':password', password_hash($password, PASSWORD_DEFAULT), PDO::PARAM_STR);
 
-try {
-    $insertStmt->execute();
-} catch (\Exception $e) {
-    die("Connection error {$e->getMessage()}");
-}
+$conn->prepare_query("INSERT INTO users (`name`, `email`, `password`) VALUES (?, ?, ?)");
+$conn->issue_query(array($name, $email, password_hash($password, PASSWORD_DEFAULT)));
+
 redirect('/autorization.php');

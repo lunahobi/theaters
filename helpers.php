@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/mysql/Theaters_DB_Access.php';
 
 
 function redirect(string $path)
@@ -66,27 +66,22 @@ function getMessage(string $key): string
     return $message;
 }
 
-function getPDO(): PDO
+function connection():Theater_DB_Access
 {
-    try {
-        return new \PDO('mysql: host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASSWORD);
-    } catch (\PDOException $e) {
-        die("DB error {$e->getMessage()}");
-    }
+    return new Theater_DB_Access;
 }
 
 function findUser(string $email): array|bool
 {
-    $pdo = getPDO();
-
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE `email`=:email");
-    $stmt->execute([':email' => $email]);
-    return $stmt->fetch(\PDO::FETCH_ASSOC);
+    $conn = connection();
+    $conn->prepare_query("SELECT * FROM users WHERE `email`=?");
+    $conn->issue_query(array("$email"));
+    return $conn->fetch_array();
 }
 
 function currentUser(): array|false
 {
-    $pdo = getPDO();
+    $conn = connection();
 
     if (!isset($_SESSION['user'])) {
         return false;
@@ -94,9 +89,12 @@ function currentUser(): array|false
 
     $userId = $_SESSION['user']['id'] ?? null;
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE `id`=:id");
-    $stmt->execute([':id' => $userId]);
-    return $stmt->fetch(\PDO::FETCH_ASSOC);
+    // $stmt = $pdo->prepare("SELECT * FROM users WHERE `id`=:id");
+    // $stmt->execute([':id' => $userId]);
+    // return $stmt->fetch(\PDO::FETCH_ASSOC);
+    $conn->prepare_query("SELECT * FROM users WHERE `id`=?");
+    $conn->issue_query(array("$userId"));
+    return $conn->fetch_array();
 }
 
 function logout()

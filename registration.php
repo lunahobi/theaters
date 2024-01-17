@@ -60,7 +60,7 @@ checkGuest();
                     <div class="form mb-5">
                         <form action="actions/reg.php" method="post" style="width: 22rem;">
                             <div class="form-outline mb-4">
-                                <input type="text" id="fio" name='fio' class="form-control" placeholder="Имя" <?php echo validationErrorAttr('fio') ?> value=<?php echo old('fio') ?>>
+                                <input type="text" id="fio" name='fio' class="form-control" placeholder="Имя" readonly onfocus="this.removeAttribute('readonly');" onblur="this.setAttribute('readonly','');" <?php echo validationErrorAttr('fio') ?> value=<?php echo old('fio') ?>>
                                 <?php if (hasValidationError('fio')) : ?>
                                     <small><?php echo validationErrorMessage('fio'); ?></small>
                                 <?php endif; ?>

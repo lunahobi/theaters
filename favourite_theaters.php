@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php 
+include "mysql/Theaters_DB_Access.php";
+$conn = new Theater_DB_Access;
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,18 +70,14 @@
             <div class="row">
                 <h3 class="text-center mt-5 mb-3">Избранное</h3>
                 <?php
-                include "db.php";
+
                 $userId = $_SESSION['user']['id'];
 
-                // Получение избранных театров для текущего пользователя
-                $query = "SELECT dataset.* FROM dataset JOIN favourites ON dataset.id = favourites.theater_id WHERE favourites.user_id = ?";
-                $stmt = mysqli_prepare($mysql, $query);
-                mysqli_stmt_bind_param($stmt, "i", $userId);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
+                $conn->prepare_query("SELECT dataset.* FROM dataset JOIN favourites ON dataset.id = favourites.theater_id WHERE favourites.user_id = ?");
+                $result = $conn->issue_query(array($userId));
 
                 // Вывод карточек театров
-                while ($row = mysqli_fetch_assoc($result)) {
+                while ($row = $conn->fetch_array($result)) {
                     $main_image = json_decode($row['Изображение'], true);
                     echo '<div class="col-md-4 mb-4">';
                     echo '<div class="card text-black" style="background-color: #f5f1e7">';
@@ -90,9 +91,6 @@
                     echo '</div>';
                     echo '</div>';
                 }
-
-                // Закрытие соединения
-                mysqli_close($mysql);
                 ?>
             </div>
         </div>

@@ -2,15 +2,14 @@
 <html lang="en">
 
 <?php
-include "db.php";
+include "mysql/Theaters_DB_Access.php";
 
-// Получаем данные из базы данных
-$query = mysqli_query($mysql, "SELECT `id`, `На карте`, `Название` FROM dataset");
-
+$conn = new Theater_DB_Access;
+$result = $conn->issue_query("SELECT `id`, `На карте`, `Название` FROM dataset");
 // Массив для хранения координат
 $coordinates = [];
 
-while ($location = mysqli_fetch_assoc($query)) {
+while ($location = $conn->fetch_array($result)) {
     // Обработка JSON-строки
     $jsonCoordinates = json_decode($location['На карте'], true);
     $id = $location['id'];
