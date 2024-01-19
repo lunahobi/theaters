@@ -37,7 +37,10 @@
                         <a class="nav-link active" href="index.php">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="theaters.php">Список</a>
+                        <a class="nav-link" href="possibilities.php">Возможности</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="theaters.php">Поиск</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="map.php">Карта</a>
@@ -55,7 +58,6 @@
                             </li>   
                         <?php }
                     ?>
-                    
                 </ul>
             </div>
         </div>
@@ -76,7 +78,7 @@
                             <h1 class='text-carousel-h1 d-block d-md-none'>Добро пожаловать!</h1>
                             <p class='text-carousel-p d-none d-md-block'>Здесь вы сможете выбрать театр поблизости либо по различным критериям, также у вас есть возможность просматировать их на карте, а еще прокладывать к ним путь</p>
                             <p class='text-carousel-p d-block d-md-none'>Здесь вы сможете выбрать театр, также у вас есть возможность просматировать их на карте, а еще прокладывать к ним путь</p>
-                            <p><a class="btn btn-lg btn-carousel" href="#info">Подробнее</a></p>
+                            <p><a class="btn btn-lg btn-carousel" href="possibilities.php">Подробнее</a></p>
                         </div>
                     </div>
                 </div>
@@ -112,48 +114,7 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-
-        <section id='info' class="py-5">
-            <div class="container mw-80">
-                <div class="row justify-content-center">
-
-                    <h2 class="text-center mb-5" style="color:#25204e">На нашем сайте можно</h2>
-
-                    <div class="col-lg-3 col-md-4 col-10">
-                        <a href="theaters.php" style="text-decoration: none;">
-                            <div class="card align-items-center justify-content-center mb-3">
-                                <img src="img/info.svg" class="card-img-top img-small img-fluid mt-4" alt="info">
-                                <div class="card-body">
-                                    <h6 class="card-title text-center">Просмотреть информацию о театральных площадках и коллективах с возможностью фильтрации</h6>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-lg-3 col-md-4 col-10">
-                        <a href="map.php" style="text-decoration: none;">
-                            <div class="card align-items-center justify-content-center mb-3">
-                                <img src="img/map.svg" class="card-img-top img-small img-fluid mt-4" alt="map">
-                                <div class="card-body">
-                                    <h6 class="card-title text-center">Наглядно увидеть на карте местоположения всех театральных площадок и коллективов с возможностью перехода на более подробную информацию</h6>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-lg-3 col-md-4 col-10">
-                        <a href="autorization.php" style="text-decoration: none;">
-                            <div class="card align-items-center justify-content-center">
-                                <img src="img/route.svg" class="card-img-top img-small img-fluid mt-4" alt="route">
-                                <div class="card-body">
-                                    <h6 class="card-title text-center">Добавить театры в избранное и проложить удобный маршрут от текущего местоположения до театров<br> (необходима авторизация)</h6>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div style="height:7rem; background-color: #f5f1e7"></div>
     </main>
 
     <!-- Форма обратной связи и контакты -->

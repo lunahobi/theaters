@@ -41,23 +41,26 @@ include "mysql/Theaters_DB_Access.php";
                         <a class="nav-link" href="index.php">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="theaters.php">Список</a>
+                        <a class="nav-link" href="possibilities.php">Возможности</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="theaters.php">Поиск</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="map.php">Карта</a>
                     </li>
                     <?php
-                    if (!isset($_SESSION)) session_start();
-                    if (empty($_SESSION['user'])) { ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="autorization.php">Авторизация</a>
-                        </li>
-                    <?php }
-                    if (!empty($_SESSION['user'])) { ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="lk.php">Личный кабинет</a>
-                        </li>
-                    <?php }
+                        if (!isset($_SESSION)) session_start();
+                        if(empty($_SESSION['user'])){?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="autorization.php">Авторизация</a>
+                            </li>   
+                        <?php }
+                        if(!empty($_SESSION['user'])){?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="lk.php">Личный кабинет</a>
+                            </li>   
+                        <?php }
                     ?>
                 </ul>
             </div>

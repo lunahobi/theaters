@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-
-require_once __DIR__ . '/helpers.php';
-checkAuth();
-$user = currentUser();
-?>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +18,9 @@ $user = currentUser();
 
     <!-- Custom styles for this template -->
     <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </head>
 
 <body>
@@ -41,7 +37,7 @@ $user = currentUser();
                         <a class="nav-link" href="index.php">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="possibilities.php">Возможности</a>
+                        <a class="nav-link active" href="possibilities.php">Возможности</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="theaters.php">Поиск</a>
@@ -50,37 +46,65 @@ $user = currentUser();
                         <a class="nav-link" href="map.php">Карта</a>
                     </li>
                     <?php
-                        if (!isset($_SESSION)) session_start();
-                        if(empty($_SESSION['user'])){?>
-                            <li class="nav-item">
-                                <a class="nav-link" href="autorization.php">Авторизация</a>
-                            </li>   
-                        <?php }
-                        if(!empty($_SESSION['user'])){?>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="lk.php">Личный кабинет</a>
-                            </li>   
-                        <?php }
+                    if (!isset($_SESSION)) session_start();
+                    if (empty($_SESSION['user'])) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="autorization.php">Авторизация</a>
+                        </li>
+                    <?php }
+                    if (!empty($_SESSION['user'])) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="lk.php">Личный кабинет</a>
+                        </li>
+                    <?php }
                     ?>
+
                 </ul>
             </div>
         </div>
     </nav>
+    <main>
+        <section id='info' class="py-5">
+            <div class="container mw-80">
+                <div class="row justify-content-center">
 
-    <main id="auth">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col">
-                    <h3 class="mt-5 mb-3 text-center">Личный кабинет</h3>
-                    <h5>Добро пожаловать, <?= $user['name'] ?>!</h5>
-                    <a href="favourite_theaters.php" class="btn btn-lk mb-2">Избранное</a>
-                    <form action="actions/logout.php" method="post">
-                        <button class="btn btn-lk mb-5">Выйти из аккаунта</button>
-                    </form>
+                    <h2 class="text-center mb-5" style="color:#25204e">На нашем сайте можно</h2>
+
+                    <div class="col-lg-3 col-md-4 col-10">
+                        <a href="theaters.php" style="text-decoration: none;">
+                            <div class="card align-items-center justify-content-center mb-3">
+                                <img src="img/info.svg" class="card-img-top img-small img-fluid mt-4" alt="info">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center">Просмотреть информацию о театральных площадках и коллективах с возможностью фильтрации</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-10">
+                        <a href="map.php" style="text-decoration: none;">
+                            <div class="card align-items-center justify-content-center mb-3">
+                                <img src="img/map.svg" class="card-img-top img-small img-fluid mt-4" alt="map">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center">Наглядно увидеть на карте местоположения всех театральных площадок и коллективов с возможностью перехода на более подробную информацию</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-10">
+                        <a href="autorization.php" style="text-decoration: none;">
+                            <div class="card align-items-center justify-content-center">
+                                <img src="img/route.svg" class="card-img-top img-small img-fluid mt-4" alt="route">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center">Добавить театры в избранное и проложить удобный маршрут от текущего местоположения до театров<br> (необходима авторизация)</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-
+        </section>
     </main>
 
     <!-- Форма обратной связи и контакты -->
@@ -104,7 +128,6 @@ $user = currentUser();
                         </div>
                         <div class="text-center">
                             <button id='btn-contacts' type="submit" class="btn">Отправить</button>
-                            <div class="status"></div>
                         </div>
                     </form>
 

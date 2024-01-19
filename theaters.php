@@ -42,7 +42,10 @@ $conn = new Theater_DB_Access;
                         <a class="nav-link" href="index.php">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="theaters.php">Список</a>
+                        <a class="nav-link" href="possibilities.php">Возможности</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="theaters.php">Поиск</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="map.php">Карта</a>
@@ -62,23 +65,21 @@ $conn = new Theater_DB_Access;
                     ?>
                 </ul>
             </div>
-        </div>
     </nav>
     <main>
         <div class="container mt-4">
             <div class="row">
                 <!-- Форма для выбора критериев фильтрации -->
                 <h3 class="text-center mb-3">Театральные площадки и коллективы России</h3>
+                <p>Используйте фильтры, чтобы найти интересующие вас театры:</p>
                 <form method="get" action="theaters.php">
                     <div class="form-row">
                         <!-- Выбор местоположения -->
                         <div class="form-group col-md-4">
                             <label for="location">Местоположение</label>
                             <select id="location" name="location" class="form-control">
-                                <option value="">Выберите местоположение</option>
-                                <!-- Возможные варианты местоположения из базы данных -->
+                                <option value="">Не выбрано</option>
                                 <?php
-
                                 $conn->issue_query("SELECT DISTINCT `Местоположение` FROM dataset");
 
                                 while ($location = $conn->fetch_array()) {
@@ -92,10 +93,8 @@ $conn = new Theater_DB_Access;
                         <div class="form-group col-md-4">
                             <label for="category">Категория</label>
                             <select id="category" name="category" class="form-control">
-                                <option value="">Выберите категорию</option>
-                                <!-- Возможные варианты категорий из базы данных -->
+                                <option value="">Не выбрано</option>
                                 <?php
-
                                 $conn->issue_query("SELECT DISTINCT `Категория учреждения` FROM dataset");
 
                                 while ($category = $conn->fetch_array()) {
@@ -109,10 +108,8 @@ $conn = new Theater_DB_Access;
                         <div class="form-group col-md-4">
                             <label for="auditory">Аудитория</label>
                             <select id="auditory" name="auditory" class="form-control">
-                                <option value="">Выберите аудиторию</option>
-                                <!-- Возможные варианты категорий из базы данных -->
+                                <option value="">Не выбрано</option>
                                 <?php
-
                                 $conn->issue_query("SELECT DISTINCT `Аудитория` FROM dataset");
 
                                 while ($auditory = $conn->fetch_array()) {
@@ -129,9 +126,9 @@ $conn = new Theater_DB_Access;
                 </form>
             </div>
             <div class="row">
-
                 <?php
-                $conne = new Theater_DB_Access;
+
+                $conn = new Theater_DB_Access;
 
                 $query = "SELECT * FROM dataset";
 
@@ -148,11 +145,33 @@ $conn = new Theater_DB_Access;
                     $query .= (empty($_GET['category']) ? (empty($_GET['location']) ? " WHERE" : " AND") : " AND") . " `Аудитория` = '" . $_GET['auditory'] . "'";
                 }
 
-                $result = $conne->issue_query($query);
+                $result = $conn->issue_query($query);
+
+                function getFoundWordForm($number)
+                {
+                    if ($number % 10 == 1 && $number % 100 != 11) {
+                        return 'Найден ';
+                    } else
+                        return 'Найдено ';
+                }
+
+                function getResultsWordForm($number)
+                {
+                    if ($number % 10 == 1 && $number % 100 != 11) {
+                        return 'результат';
+                    } elseif (($number % 10 >= 2 && $number % 10 <= 4) && ($number % 100 < 10 || $number % 100 >= 20)) {
+                        return 'результата';
+                    } else {
+                        return 'результатов';
+                    }
+                }
 
                 if (isset($_GET['location'])) {
+                    // Вывод информации о количестве результатов
+                    $total_results = $conn->count_rows($result);
+                    echo '<p class="mb-3">' . getFoundWordForm($total_results) . $total_results . ' ' . getResultsWordForm($total_results) . '</p>';
                     // Вывод карточек театров
-                    while ($row = $conne->fetch_array($result)) {
+                    while ($row = $conn->fetch_array($result)) {
                         $main_image = json_decode($row['Изображение'], true);
                         echo '<div class="col-md-4 mb-4">';
                         echo '<div class="card text-black" style="background-color: #f5f1e7">';
@@ -170,6 +189,7 @@ $conn = new Theater_DB_Access;
                 ?>
             </div>
         </div>
+
     </main>
     <!-- Форма обратной связи и контакты -->
     <section id='contacts' class="py-5">
